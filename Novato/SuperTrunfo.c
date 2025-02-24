@@ -15,6 +15,7 @@ int main() {
     //Criar carta 1
     printf("Carta 1\n");
 
+    //Nome do estado
     printf("Digite o estado: ");
     scanf("%49s", estado1);
 
@@ -80,7 +81,5 @@ int main() {
     printf("Pontos turísticos: %d\n", pontosTuristicos2);
 
     return 0;
-
-
 
 }
