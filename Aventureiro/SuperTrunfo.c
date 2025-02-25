@@ -4,7 +4,6 @@
 
 // Define o máximo de cartas cadastráveis
 #define MAX_CARTAS 10
-Carta *listadeCartas[MAX_CARTAS];
 
 // Estrutura da carta
 typedef struct
@@ -19,6 +18,8 @@ typedef struct
 
 } Carta;
 
+Carta *listadeCartas[MAX_CARTAS];
+
 /*Funções*/ 
 // Guarda a carta na lista de cartas
 void guardarCarta(Carta *carta, int numeroCarta)
@@ -27,7 +28,7 @@ void guardarCarta(Carta *carta, int numeroCarta)
 }
 
 // Cadastra a carta
-void cadastrarCarta(Carta *carta, int numeroCarta)
+void cadastrarCarta(Carta *carta)
 {
     printf("Digite o estado: ");
     scanf("%49s", carta->estado);
@@ -51,6 +52,17 @@ void cadastrarCarta(Carta *carta, int numeroCarta)
     scanf("%d", &carta->pontosTuristicos);
 }
 
+void exibirCarta(Carta *carta,int numeroCarta)
+{
+    printf("Estado: %s\n", carta->estado);
+    printf("Código: %s\n", carta->codigo);
+    printf("Nome da cidade: %s\n", carta->nomeCidade);
+    printf("População: %d\n", carta->populacao);
+    printf("Área: %.2f\n", carta->area);
+    printf("PIB: %.2f\n", carta->pib);
+    printf("Pontos turísticos: %d\n", carta->pontosTuristicos);
+}
+
 // Exibe as cartas cadastradas
 void exibirTodasCartas()
 {
@@ -59,7 +71,7 @@ void exibirTodasCartas()
         if (listadeCartas[i] != NULL)
         {
             printf("Carta %d:\n", i + 1);
-            exibirCarta(listadeCartas[i]);
+            exibirCarta(listadeCartas[i], i + 1);
             printf("\n");
         }
     }
@@ -94,11 +106,30 @@ int main() {
         // Verifica a opção escolhida e executa a ação
         if (opcao == 1)
         {
-            printf("Cadastro de Cartas\n\n");
-            cadastrarCarta(&carta, numeroCarta);
-            guardarCarta(&carta, numeroCarta);
+            if (numeroCarta < MAX_CARTAS)
+            {
+                printf("Cadastro de Cartas\n\n");
 
-            numeroCarta++;
+                system("clear");
+                printf("Carta %d\n", numeroCarta + 1);
+
+                // Aloca memória para uma nova carta
+                Carta *novaCarta = (Carta *)malloc(sizeof(Carta));
+                if (novaCarta == NULL)
+                {
+                    printf("Erro ao alocar memória!\n");
+                    exit(1);
+                }
+
+                cadastrarCarta(novaCarta);
+                guardarCarta(novaCarta, numeroCarta);
+
+                numeroCarta++;
+            }
+            else
+            {
+                printf("Número máximo de cartas cadastradas atingido!\n");
+            }
         }
         else if (opcao == 2)
         {
@@ -107,6 +138,15 @@ int main() {
         else if (opcao == 3)
         {
             start = 0;
+        }
+    }
+
+    // Libera a memória alocada para as cartas
+    for (int i = 0; i < MAX_CARTAS; i++)
+    {
+        if (listadeCartas[i] != NULL)
+        {
+            free(listadeCartas[i]);
         }
     }
 
